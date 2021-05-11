@@ -4,6 +4,8 @@
 
 package com.telnyx.webrtc.sdk
 
+const val firebaseServerKey = "<SERVER_KEY>"
+
 const val MOCK_USERNAME = "<SIP_USER>"
 const val MOCK_PASSWORD = "<SIP_PASSWORD>"
 const val MOCK_CALLER_NAME = "NAME"

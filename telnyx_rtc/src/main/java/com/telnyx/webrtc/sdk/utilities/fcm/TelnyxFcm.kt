@@ -9,6 +9,7 @@ import com.google.firebase.messaging.RemoteMessage
 import com.telnyx.webrtc.sdk.utilities.ApiUtils
 import com.telnyx.webrtc.sdk.utilities.RetrofitAPIInterface
 import com.telnyx.webrtc.sdk.verto.receive.FcmRegistrationResponse
+import com.telnyx.webrtc.sdk.verto.receive.TelnyxNotificationServiceResponse
 import com.telnyx.webrtc.sdk.verto.send.CreateCredential
 import com.telnyx.webrtc.sdk.verto.send.Data
 import org.json.JSONObject
@@ -68,16 +69,33 @@ object TelnyxFcm {
         })
     }
 
-    fun setCredentials(fcmServerKey: String, deviceId: String?) {
+    fun setCredentials(fcmServerKey: String): String? {
         val apiService: RetrofitAPIInterface?
         apiService = ApiUtils.apiService
 
-        deviceId?.let {
-            val serverKeyJsonObject = JSONObject()
-            serverKeyJsonObject.put("server_key", fcmServerKey)
-            val data = Data(fcmServerKey, it)
-            val createCredential = CreateCredential("android", data)
-            apiService.createCredentials(createCredential)
-        }
+        var credentialID: String? = null
+
+        val serverKeyJsonObject = JSONObject()
+        serverKeyJsonObject.put("server_key", fcmServerKey)
+        val data = Data(fcmServerKey, fcmServerKey)
+        val createCredential = CreateCredential("android", data)
+        apiService.createCredentials(createCredential)?.enqueue(object :
+            Callback<TelnyxNotificationServiceResponse> {
+            override fun onResponse(
+                call: Call<TelnyxNotificationServiceResponse>,
+                response: Response<TelnyxNotificationServiceResponse>
+            ) {
+                if (response.isSuccessful) {
+                    credentialID = response.body()?.data?.credential_id
+                }
+            }
+
+            override fun onFailure(call: Call<TelnyxNotificationServiceResponse>, t: Throwable) {
+                credentialID = null
+            }
+
+        })
+
+        return credentialID
     }
 }

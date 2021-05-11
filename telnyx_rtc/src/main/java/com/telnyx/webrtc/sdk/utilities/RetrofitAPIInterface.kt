@@ -6,6 +6,7 @@ package com.telnyx.webrtc.sdk.utilities
 
 import RetrofitAPIClient
 import com.telnyx.webrtc.sdk.verto.receive.FcmRegistrationResponse
+import com.telnyx.webrtc.sdk.verto.receive.TelnyxNotificationServiceResponse
 import com.telnyx.webrtc.sdk.verto.send.CreateCredential
 import retrofit2.Call
 import retrofit2.http.*
@@ -18,7 +19,7 @@ interface RetrofitAPIInterface {
         @Field("action") action: String,
         @Field("type") type: String,
         @Field("device_id") device_id: String
-    ): retrofit2.Call<FcmRegistrationResponse>
+    ): Call<FcmRegistrationResponse>
 
 
    /* @POST("credentials")
@@ -29,7 +30,7 @@ interface RetrofitAPIInterface {
 
     @POST("credentials")
     @Headers( "accept: application/json", "cache-control: no-cache", "content-type: application/json" )
-    fun createCredentials(@Body createCredential: CreateCredential?): Call<CreateCredential?>?
+    fun createCredentials(@Body createCredential: CreateCredential?): Call<TelnyxNotificationServiceResponse>?
 }
 
 object ApiUtils {

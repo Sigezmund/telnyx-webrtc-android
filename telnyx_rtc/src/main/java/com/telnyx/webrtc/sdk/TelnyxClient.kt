@@ -18,6 +18,7 @@ import com.telnyx.webrtc.sdk.socket.TxSocket
 import com.telnyx.webrtc.sdk.socket.TxSocketListener
 import com.telnyx.webrtc.sdk.utilities.ConnectivityHelper
 import com.telnyx.webrtc.sdk.utilities.TelnyxLoggingTree
+import com.telnyx.webrtc.sdk.utilities.fcm.TelnyxFcm
 import com.telnyx.webrtc.sdk.verto.receive.*
 import com.telnyx.webrtc.sdk.verto.send.*
 import io.ktor.server.cio.backend.*
@@ -261,14 +262,14 @@ class TelnyxClient(
         val uuid: String = UUID.randomUUID().toString()
         val user = config.sipUser
         val password = config.sipPassword
-        val fcmDeviceId = config.fcmDeviceId
+        val fcmToken = config.fcmToken
         val logLevel = config.logLevel
 
         Config.USERNAME = config.sipUser
         Config.PASSWORD = config.sipPassword
 
         credentialSessionConfig = config
-        clientFcmDeviceId = fcmDeviceId
+        clientFcmDeviceId = fcmToken
 
         setSDKLogLevel(logLevel)
 
@@ -286,7 +287,7 @@ class TelnyxClient(
                 login_token = null,
                 login = user,
                 passwd = password,
-                fcmDeviceId = fcmDeviceId,
+                fcmDeviceId = fcmToken,
                 userVariables = arrayListOf(),
                 loginParams = arrayListOf()
             )
@@ -304,11 +305,11 @@ class TelnyxClient(
     fun tokenLogin(config: TokenConfig) {
         val uuid: String = UUID.randomUUID().toString()
         val token = config.sipToken
-        val fcmDeviceId = config.fcmDeviceId
+        val fcmToken = config.fcmToken
         val logLevel = config.logLevel
 
         tokenSessionConfig = config
-        clientFcmDeviceId = fcmDeviceId
+        clientFcmDeviceId = fcmToken
 
         setSDKLogLevel(logLevel)
 
@@ -319,7 +320,7 @@ class TelnyxClient(
                 login_token = token,
                 login = null,
                 passwd = null,
-                fcmDeviceId = fcmDeviceId,
+                fcmDeviceId = fcmToken,
                 userVariables = arrayListOf(),
                 loginParams = arrayListOf()
             )
@@ -450,8 +451,8 @@ class TelnyxClient(
      *  Creates credentials that can be used with the Telnyx Push Notification service in conjunction with Firebase Cloud Messaging
      *  @param fcmServerKey, the Server Key provided in the Firebase Console.
      */
-    fun createPushNotificationCredential(fcmServerKey: String) {
-        TelnyxFcm.setCredentials(fcmServerKey, clientFcmDeviceId)
+    fun createPushNotificationCredential(fcmServerKey: String): String? {
+        return TelnyxFcm.setCredentials(fcmServerKey)
     }
 
     // TxSocketListener Overrides

@@ -15,7 +15,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.FirebaseApp
-import com.google.firebase.installations.FirebaseInstallations
 import com.google.firebase.messaging.FirebaseMessaging
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
@@ -56,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar_id))
 
-        FirebaseApp.initializeApp(this);
+        FirebaseApp.initializeApp(this)
         getFCMToken()
 
         mainViewModel = ViewModelProvider(this@MainActivity).get(MainViewModel::class.java)
@@ -66,8 +65,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.actionbar_menu, menu);
-        return true;
+        menuInflater.inflate(R.menu.actionbar_menu, menu)
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
@@ -243,6 +242,9 @@ class MainActivity : AppCompatActivity() {
         val ringtone = R.raw.incoming_call
         val ringBackTone = R.raw.ringback_tone
 
+        val notificationCredentials = mainViewModel.createNotificationCredentials(firebaseServerKey)
+
+
         if (token_login_switch.isChecked) {
             val sipToken = sip_token_id.text.toString()
             val sipCallerName = token_caller_id_name_id.text.toString()
@@ -252,7 +254,7 @@ class MainActivity : AppCompatActivity() {
                 sipToken,
                 sipCallerName,
                 sipCallerNumber,
-                fcmDeviceId,
+                notificationCredentials,
                 ringtone,
                 ringBackTone,
                 LogLevel.ALL
@@ -271,7 +273,7 @@ class MainActivity : AppCompatActivity() {
                 password,
                 sipCallerName,
                 sipCallerNumber,
-                fcmDeviceId,
+                notificationCredentials,
                 ringtone,
                 ringBackTone,
                 LogLevel.ALL
@@ -317,8 +319,6 @@ class MainActivity : AppCompatActivity() {
         socket_text_value.text = getString(R.string.connected)
         login_section_id.visibility = View.GONE
         call_control_section_id.visibility = View.VISIBLE
-
-        mainViewModel.createNotificationCredentials(FCM_SERVER_KEY)
 
         //Dont store login details if logged in via a token
         if (!token_login_switch.isChecked) {

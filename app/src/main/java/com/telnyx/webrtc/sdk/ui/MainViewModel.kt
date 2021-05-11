@@ -34,8 +34,8 @@ class MainViewModel @Inject constructor(
         telnyxClient?.connect()
     }
 
-    fun createNotificationCredentials(fcmServerKey: String) {
-        telnyxClient?.createPushNotificationCredential(fcmServerKey)
+    fun createNotificationCredentials(fcmServerKey: String): String? {
+       return telnyxClient?.createPushNotificationCredential(fcmServerKey)
     }
 
     fun saveUserData(
