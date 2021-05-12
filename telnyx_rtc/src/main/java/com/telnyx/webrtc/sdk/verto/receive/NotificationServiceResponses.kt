@@ -15,5 +15,7 @@ data class TelnyxNotificationServiceResponse (
 )
 
 data class Data (
-    @SerializedName("credential_id") val credential_id : String
+    @SerializedName("data") val data : Data?,
+    @SerializedName("id") val id : String,
+    @SerializedName("type") val type : String
 )
