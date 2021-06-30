@@ -139,9 +139,11 @@ class TelnyxClient(
     }
 
     init {
+/*
         if(!BuildConfig.IS_TESTING.get()) {
             Bugsnag.start(context)
         }
+*/
 
         socket = TxSocket(
             host_address = Config.TELNYX_HOST_ADDRESS,

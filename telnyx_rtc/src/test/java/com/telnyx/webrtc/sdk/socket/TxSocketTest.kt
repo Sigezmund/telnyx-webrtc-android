@@ -135,6 +135,7 @@ class TxSocketTest : BaseTest() {
 
     @Test
     fun `connect with valid host and port`() {
+        BuildConfig.IS_TESTING.set(true);
         socket = Mockito.spy(TxSocket(
             host_address = "rtc.telnyx.com",
             port = 14938,
@@ -151,12 +152,13 @@ class TxSocketTest : BaseTest() {
 
     @Test
     fun `disconnect from socket`() {
+        BuildConfig.IS_TESTING.set(true);
         client = Mockito.spy(TelnyxClient(mockContext))
-
         client.socket = Mockito.spy(TxSocket(
             host_address = "rtc.telnyx.com",
             port = 14938,
         ))
+
 
         client.disconnect()
         Thread.sleep(3000)
@@ -166,6 +168,7 @@ class TxSocketTest : BaseTest() {
 
     @Test
     fun `connect with empty host or port`() {
+        BuildConfig.IS_TESTING.set(true);
         socket = Mockito.spy(TxSocket(
             host_address = "",
             port = 0,
@@ -182,6 +185,7 @@ class TxSocketTest : BaseTest() {
 
     @Test
     fun `set call to ongoing`() {
+        BuildConfig.IS_TESTING.set(true);
         socket = Mockito.spy(TxSocket(
             host_address = "rtc.telnyx.com",
             port = 14938,
@@ -195,6 +199,7 @@ class TxSocketTest : BaseTest() {
 
     @Test
     fun `set call to not ongoing`() {
+        BuildConfig.IS_TESTING.set(true);
         socket = Mockito.spy(TxSocket(
             host_address = "rtc.telnyx.com",
             port = 14938,
