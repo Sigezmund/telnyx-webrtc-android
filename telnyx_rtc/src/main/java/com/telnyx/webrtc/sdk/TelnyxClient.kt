@@ -74,7 +74,6 @@ class TelnyxClient(
         sessionId?.let {
             return Call(context, this, socket, sessionId!!, audioManager!!)
         }
-        socketResponseLiveData.postValue(SocketResponse.error("Session ID is not set, failed to build call"))
         return null
     }
 
@@ -475,18 +474,17 @@ class TelnyxClient(
      * Fires once we have successfully received a 'REGED' gateway response, meaning login was successful
      * @param sessionId, the session ID of the successfully registered session.
      */
-    internal fun onLoginSuccessful(receivedLoginSessionId: String) {
+    internal fun onLoginSuccessful(sessionId: String) {
         Timber.d(
             "[%s] :: onLoginSuccessful [%s]",
             this@TelnyxClient.javaClass.simpleName,
-            receivedLoginSessionId
+            sessionId
         )
-        sessionId = receivedLoginSessionId
         socketResponseLiveData.postValue(
             SocketResponse.messageReceived(
                 ReceivedMessageBody(
                     SocketMethod.LOGIN.methodName,
-                    LoginResponse(receivedLoginSessionId)
+                    LoginResponse(sessionId)
                 )
             )
         )
