@@ -12,6 +12,8 @@ import android.content.Intent
 import android.graphics.Color
 import android.media.RingtoneManager
 import android.os.Build
+import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -46,6 +48,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notificationID = Random().nextInt(3000)
 
+        initiateCallService(telnyxPushMetadata)
+
+        /*
         /*
             Apps targeting SDK 26 or above (Android O) must implement notification channels and add its notifications
             to at least one of them.
@@ -90,7 +95,22 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setAutoCancel(true)
             .setSound(notificationSoundUri)
 
-        notificationManager.notify(notificationID, notificationBuilder.build())
+        notificationManager.notify(notificationID, notificationBuilder.build()) */
+    }
+
+    private fun initiateCallService(pushMeta: PushMetaData) {
+        try {
+            val callManager: CallHandler?
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                Log.e("initiateCallService: ",pushMeta.toString())
+                callManager = CallHandler(applicationContext)
+                callManager.init()
+                callManager.startIncomingCall(pushMeta)
+            }
+        } catch (e: Exception) {
+            Log.e("initiateCallError:","${e.message}" )
+            Toast.makeText(applicationContext, "Unable to receive call due to " + e.message, Toast.LENGTH_LONG)
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
